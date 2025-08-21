@@ -8,7 +8,7 @@ import { getCurrentUser } from "@/lib/actions/auth.action";
 import {
   getInterviewsByUserId,
   getLatestInterviews,
-} from "@/lib/actions/auth.action";
+} from "@/lib/actions/general.actions";
 const page = async () => {
   const user = await getCurrentUser();
   const [userInterviews, latestInterviews] = await Promise.all([
