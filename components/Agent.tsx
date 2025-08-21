@@ -5,7 +5,6 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { vapi } from "@/lib/vapi.sdk";
-import { set } from "zod";
 
 enum CallStatus {
   INACTIVE = "INACTIVE",
