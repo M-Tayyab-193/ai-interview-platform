@@ -36,10 +36,11 @@ const page = async ({ params }: RouteParams) => {
       </div>
       {console.log("interview", interview)}
       <Agent
-        userName={user?.name}
+        userName={user?.name || ""}
+        userId={user?.id}
         interviewId={id}
         type="interview"
-        quuestions={interview.questions}
+        questions={interview.questions}
       />
     </>
   );
