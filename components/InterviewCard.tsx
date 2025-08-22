@@ -7,7 +7,6 @@ import { Button } from "./ui/button";
 import { getFeedbackbyInterviewId } from "@/lib/actions/general.actions";
 import DisplayTechIcons from "./DisplayTechIcons";
 import { getCurrentUser } from "@/lib/actions/auth.action";
-import { is } from "zod/v4/locales";
 const InterviewCard = async ({
   id,
   userId,
@@ -17,13 +16,15 @@ const InterviewCard = async ({
   techstack,
   createdAt,
 }: InterviewCardProps) => {
-  const user = getCurrentUser();
+  const user = await getCurrentUser();
 
   const feedback =
     userId && id
       ? await getFeedbackbyInterviewId({ interviewId: id, userId })
       : null;
   const isUser = userId === user?.id;
+  console.log("user id coming from prop,", userId);
+  console.log("current user id,", user.id);
   const normalizedType = /mix/gi.test(type) ? "mixed" : type;
   const formattedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
