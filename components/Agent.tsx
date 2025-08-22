@@ -114,6 +114,7 @@ const Agent = ({
           },
         }
       );
+      console.log("Starting VAPI call");
     } else {
       let formattedQuestions = "";
       if (questions) {

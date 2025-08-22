@@ -5,8 +5,6 @@ import { generateObject } from "ai";
 import { google } from "@ai-sdk/google";
 import { feedbackSchema } from "@/constants";
 
-const apiKey = process.env.GOOGLE_GENERATIVE_API_KEY!;
-
 export async function getInterviewsByUserId(
   userId: string
 ): Promise<Interview[] | null> {
@@ -128,4 +126,28 @@ export async function createFeedback(params: CreateFeedbackParams) {
       success: false,
     };
   }
+}
+
+export async function getFeedbackbyInterviewId(
+  params: GetFeedbackByInterviewIdParams
+): Promise<Feedback | null> {
+  const { interviewId, userId } = params;
+
+  const feedback = await db
+    .collection("feedback")
+    .where("interviewId", "==", interviewId)
+    .where("userId", "==", userId)
+    .limit(1)
+    .get();
+
+  if (feedback.empty) {
+    return null;
+  }
+
+  const feedbackDoc = feedback.docs[0];
+
+  return {
+    id: feedbackDoc.id,
+    ...feedbackDoc.data(),
+  } as Feedback;
 }

@@ -1,6 +1,6 @@
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
-import { getRandomInterviewCover } from "@/lib/utils";
+import { getTechLogos } from "@/lib/utils";
 import { db } from "@/firebase/admin";
 
 export async function GET() {
@@ -15,7 +15,15 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const { type, role, level, techstack, amount, userid } = await request.json();
-
+  console.log("POST request received with data:", {
+    type,
+    role,
+    level,
+    techstack,
+    amount,
+    userid,
+  });
+  console.log("Google Generative AI instance created:", google);
   try {
     const { text: questions } = await generateText({
       model: google("gemini-2.0-flash-001"),
@@ -33,6 +41,8 @@ export async function POST(request: Request) {
         Thank you! <3
     `,
     });
+    console.log("Generated questions:", questions);
+    const logos = getTechLogos(techstack);
     const interview = {
       role,
       type,
@@ -41,7 +51,7 @@ export async function POST(request: Request) {
       questions: JSON.parse(questions),
       userId: userid,
       finalized: true,
-      coverImage: getRandomInterviewCover(),
+      coverImage: logos[0]?.url,
       createdAt: new Date().toISOString(),
     };
 
