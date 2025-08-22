@@ -1,7 +1,11 @@
 import { generateText } from "ai";
-import { google } from "@ai-sdk/google";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { getTechLogos } from "@/lib/utils";
 import { db } from "@/firebase/admin";
+
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
+});
 
 export async function GET() {
   return Response.json(
