@@ -1,6 +1,6 @@
 import { generateText } from "ai";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { getTechLogos } from "@/lib/utils";
+import { getTechLogos, extractWords } from "@/lib/utils";
 import { db } from "@/firebase/admin";
 
 const google = createGoogleGenerativeAI({
@@ -46,7 +46,9 @@ export async function POST(request: Request) {
     `,
     });
     console.log("Generated questions:", questions);
-    const logos = getTechLogos(techstack);
+
+    const arr = extractWords(techstack);
+    const logos = getTechLogos(arr);
     const interview = {
       role,
       type,
@@ -55,7 +57,7 @@ export async function POST(request: Request) {
       questions: JSON.parse(questions),
       userId: userid,
       finalized: true,
-      coverImage: logos[0]?.url,
+      coverImage: logos[0]?.url || "/tech.svg",
       createdAt: new Date().toISOString(),
     };
 

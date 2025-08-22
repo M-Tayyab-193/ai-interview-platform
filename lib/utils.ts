@@ -22,6 +22,15 @@ const checkIconExists = async (url: string) => {
   }
 };
 
+export const extractWords = (input: string) => {
+  if (!input) return [];
+
+  return input
+    .split(",") // split by comma
+    .map((word) => word.trim()) // remove spaces around each word
+    .filter((word) => word !== ""); // remove empty values
+};
+
 export const getTechLogos = async (techArray: string[]) => {
   const logoURLs = techArray.map((tech) => {
     const normalized = normalizeTechName(tech);
