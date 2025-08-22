@@ -4,16 +4,21 @@ import { getRandomInterviewCover } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { getFeedbackbyInterviewId } from "@/lib/actions/general.actions";
 import DisplayTechIcons from "./DisplayTechIcons";
-const InterviewCard = ({
+const InterviewCard = async ({
   id,
   userId,
   role,
   type,
+  coverImage,
   techstack,
   createdAt,
 }: InterviewCardProps) => {
-  const feedback = null as Feedback | null;
+  const feedback =
+    userId && id
+      ? await getFeedbackbyInterviewId({ interviewId: id, userId })
+      : null;
   const normalizedType = /mix/gi.test(type) ? "mixed" : type;
   const formattedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
@@ -27,7 +32,7 @@ const InterviewCard = ({
             <p className="badge-text">{normalizedType}</p>
           </div>
           <Image
-            src={getRandomInterviewCover()}
+            src={coverImage || getRandomInterviewCover()}
             alt="cover"
             width={90}
             height={90}

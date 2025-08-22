@@ -20,6 +20,7 @@ interface Interview {
   questions: string[];
   techstack: string[];
   createdAt: string;
+  coverImage?: string;
   userId: string;
   type: string;
   finalized: boolean;
@@ -43,6 +44,7 @@ interface InterviewCardProps {
   userId?: string;
   role: string;
   type: string;
+  coverImage?: string;
   techstack: string[];
   createdAt?: string;
 }
