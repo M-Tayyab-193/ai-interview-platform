@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { getFeedbackbyInterviewId } from "@/lib/actions/general.actions";
 import DisplayTechIcons from "./DisplayTechIcons";
+import { getCurrentUser } from "@/lib/actions/auth.action";
+import { is } from "zod/v4/locales";
 const InterviewCard = async ({
   id,
   userId,
@@ -15,10 +17,13 @@ const InterviewCard = async ({
   techstack,
   createdAt,
 }: InterviewCardProps) => {
+  const user = getCurrentUser();
+
   const feedback =
     userId && id
       ? await getFeedbackbyInterviewId({ interviewId: id, userId })
       : null;
+  const isUser = userId === user?.id;
   const normalizedType = /mix/gi.test(type) ? "mixed" : type;
   const formattedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
@@ -50,17 +55,22 @@ const InterviewCard = async ({
             </div>
           </div>
           <p className="line-clamp-2 mt-5">
-            {feedback?.finalAssessment ||
-              "You haven't taken the interview yet. Take it now to improve your skills."}
+            {feedback?.finalAssessment && isUser
+              ? feedback.finalAssessment
+              : "You haven't taken the interview yet. Take it now to improve your skills."}
           </p>
         </div>
         <div className="flex flex-row justify-between">
           <DisplayTechIcons techStack={techstack} />
           <Button className="btn-primary">
             <Link
-              href={feedback ? `/interview/${id}/feedback` : `/interview/${id}`}
+              href={
+                feedback && isUser
+                  ? `/interview/${id}/feedback`
+                  : `/interview/${id}`
+              }
             >
-              {feedback ? "Check Feedback" : "Take Interview"}
+              {feedback && isUser ? "Check Feedback" : "Take Interview"}
             </Link>
           </Button>
         </div>
